@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Chat App</title>
+  </head>
+  <body>
+    <div id="chat">
+      <form v-on:submit="send">
+        <div class="message" v-for="message in messages">
+          {{ message[3] }}: {{ message[2] }}
+        </div>
+        <label>Name: </label>
+        <input id="name" v-model="name">
+        <input id="message" v-model="message">
+        <button type="submit" name="button">Send</button>
+      </form>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.12/vue.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      var channel = "SOME_CHANEL";
+      var userId = "4";
+      var userName = "USERNAME";
+    </script>
+
+    <script type="text/javascript">
+      var socket = io('http://localhost:3000');
+
+      new Vue({
+        el: '#chat',
+
+        data: {
+          messages: [],
+          message: null,
+          name: null
+        },
+
+        ready: function () {
+          socket.on('connect', function () {
+            console.log("Connected to Server..");
+            socket.emit('join', [channel, userId, userName]);
+          });
+
+          socket.on('chat.' + channel, function (payload) {
+            console.log(payload)
+            this.messages.push(['chat', payload[1], payload[2], payload[3]])
+          }.bind(this));
+        },
+
+        methods: {
+          send: function (e) {
+            e.preventDefault();
+            var payload = [channel, userId, this.message, this.name];
+
+            if(this.message == ('' || ' ')) {
+              this.message = null
+            }
+
+            if(this.message != null) {
+              socket.emit('chat', payload);
+            }
+
+            this.message = null;
+          },
+
+          isPoster: function(id) {
+            if(userId === id) {
+              return true;
+            }
+            return false;
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -78,8 +78,7 @@ export default {
   methods: {
     send: function (e) {
       e.preventDefault();
-      const f = new Date();
-      this.time = f.getHours() + ":" + f.getMinutes() + ":" + f.getSeconds();
+      this.time = this.getTime();
       const payload = [channel, userId, this.message, this.name, this.time];
 
       if(this.message == ('' || ' ')) {
@@ -98,6 +97,11 @@ export default {
         return true;
       }
       return false;
+    },
+
+    getTime: function () {
+      const f = new Date();
+      return f.getHours() + ":" + f.getMinutes() + ":" + f.getSeconds();
     }
   }
 }

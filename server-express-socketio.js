@@ -36,7 +36,7 @@ io.on('connection', function(socket) {
     }
 
     function updateNames() {
-      io.emit('chat.' + USERID, names);
+      io.emit('chat.' + USERID + '.names', names);
     }
 
     // updateNames();

@@ -1,42 +1,54 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
 
-    <div id="chat">
-      <form v-on:submit="send">
+  <div class="ui black segment">
+    <div id="app">
+      <div class="ui comments live-chat">
+        <h3 class="ui dividing header">Chat App</h3>
         <div class="message" v-for="message in messages">
-          {{ message[3] }}: {{ message[2] }}
+          <div class="comment">
+            <a class="avatar">
+              <img src="https://semantic-ui.com/images/avatar/small/matt.jpg">
+            </a>
+            <div class="content">
+              <a class="author">{{ message[3] }}</a>
+              <div class="metadata">
+                <span class="date">Today at 5:42PM</span>
+              </div>
+              <div class="text">
+                {{ message[2] }}
+              </div>
+            </div>
+          </div>
         </div>
-        <label>Name: </label>
-        <input id="name" v-model="name">
-        <input id="message" v-model="message">
-        <label>test: {{message}} </label>
-        <button type="submit" name="button">Send</button>
-      </form>
+
+
+        <form v-on:submit="send" class="ui reply form">
+          <div class="ui form">
+            <div class="inline fields">
+              <div class="field">
+                  <input type="text" placeholder="Name" v-model="name">
+              </div>
+              <div class="field">
+                <input type="text" placeholder="Comment..." v-model="message">
+              </div>
+              <div class="field">
+                <button type="submit" class="ui blue circular submit icon button">
+                  <i class="icon send"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
     </div>
-
-
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
   </div>
 </template>
 
 <script>
 var socket = io('http://localhost:3000');
-var channel = "SOME_CHANEL";
+var channel = "SOME_CHANEL2";
 var userId = "4";
 var userName = "USERNAME";
 
@@ -89,32 +101,3 @@ export default {
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
-</style>

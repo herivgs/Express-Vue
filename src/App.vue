@@ -12,7 +12,7 @@
             <div class="content">
               <a class="author">{{ message[3] }}</a>
               <div class="metadata">
-                <span class="date">Today at 5:42PM</span>
+                <span class="date">Today at {{ message[4] }}</span>
               </div>
               <div class="text">
                 {{ message[2] }}
@@ -59,7 +59,7 @@ export default {
       messages: [],
       message: null,
       name: null,
-      msg: 'Welcome to Your Vue.js App'
+      time: ''
     }
   },
 
@@ -67,19 +67,20 @@ export default {
     socket.on('connect', function () {
       console.log("Connected to Server..");
       socket.emit('join', [channel, userId, userName]);
-      console.log()
     });
 
     socket.on('chat.' + channel, function (payload) {
       console.log(payload);
-      this.messages.push(['chat', payload[1], payload[2], payload[3]]);
+      this.messages.push(['chat', payload[1], payload[2], payload[3], payload[4]]);
     }.bind(this));
   },
 
   methods: {
     send: function (e) {
       e.preventDefault();
-      var payload = [channel, userId, this.message, this.name];
+      const f = new Date();
+      this.time = f.getHours() + ":" + f.getMinutes() + ":" + f.getSeconds();
+      const payload = [channel, userId, this.message, this.name, this.time];
 
       if(this.message == ('' || ' ')) {
         this.message = null
